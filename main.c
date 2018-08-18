@@ -19,17 +19,20 @@ void* test_func(void* arg)
 
 int main(int argc, char const *argv[])
 {
+    // Initialize and set mutex
     mutex_init(&mtx, NULL);
+    mutex_attr_init(&attr);
+    mutex_attr_settype(&attr, ERRORCHECK);
 
-    pthread_t threads[2];
+    pthread_t thread;
 
     // Launch threads
     for (int i = 0; i < 2; i++)
-        pthread_create(&threads[i], NULL, test_func, &i);
+        pthread_create(&thread, NULL, test_func, &i);
 
     // Wait for threads to finish
     for (int i = 0; i < 2; i++)
-        pthread_join(threads[i], NULL);
+        pthread_join(thread, NULL);
 
     return 0;
 }

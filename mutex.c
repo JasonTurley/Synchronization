@@ -5,14 +5,11 @@
 #include <stdio.h>
 #include <pthread.h>    // pthread_self()
 #include "mutex.h"
+#include "error.h"
 
 void mutex_init(mutex_t *mutex, attr_t *attr)
 {
-    mutex = malloc(sizeof(*mutex));    
-    if ( !mutex ) {
-        fprintf(stderr, "Failed to allocate mutex\n");
-       exit(-1);
-    }
+    mutex = ec_malloc(sizeof(mutex_t));    
 
     mutex->locked = 0;
     mutex->refcnt = 0;
@@ -31,8 +28,7 @@ void mutex_lock(mutex_t *mutex)
         if (mutex->type == ERRORCHECK) {
             if (mutex->locked && mutex->tid == pthread_self()) {
                 // Same thread attempting to relock mutex
-                fprintf(stderr, "Thread %d attempting to relock mutex\n", mutex->tid);                    
-                exit(-1);
+                throw_error("Same thread attempting to relock mutex");
             } else {
                 // This is the first calling thread. Save its id
                 mutex->tid = pthread_self();
@@ -59,12 +55,7 @@ void mutex_destroy(mutex_t *mutex)
 
 void mutex_attr_init(attr_t *attr)
 {
-    attr = malloc(sizeof(*attr));
-    if (!attr) {
-        fprintf(stderr, "Failed to allocate mutex attribute\n");
-        exit(-1);
-    }
-
+    attr = ec_malloc(sizeof(*attr));
     attr->type = NORMAL;
 }
 
