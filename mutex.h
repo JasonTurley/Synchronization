@@ -1,10 +1,9 @@
 /**
- * Declaration of a mutex and mutex attribute.
+ * Declaration of a mutex object.
  * @date (created) 8.15.18
  */
 
 #pragma once
-#include <stdlib.h>
 
 /**
  * Mutex attribute types
@@ -34,9 +33,8 @@ typedef struct attr_t {
  * that prioritizes speed over correctness. Upon success, the mutex becomes
  * allocated and unlocked.
  * 
- * If successful, returns 0. Otherwise returns an error number.
  */
-int mutex_init(mutex_t *mutex, attr_t *attr);
+void mutex_init(mutex_t *mutex, attr_t *attr);
 
 /**
  * Attempts to lock to mutex object. If `mutex` is already locked, then the 
@@ -69,11 +67,22 @@ void mutex_unlock(mutex_t *mutex);
  * it. A destroyed mutex may be  reinitialized by `mutex_init`.
  * 
  * Note: Attempting to destroy a locked mutex results in undefined behavior.
- * If successful, returns 0. Otherwise returns an error number.
  */
 void mutex_destroy(mutex_t *mutex);
 
 /**
- * Locks the mutex by performing a busy wait spin lock.
+ * Initializes a mutex object attribute `attr` with the default value NORMAL.
  */
-void spin_lock(mutex_t *mutex);
+void mutex_attr_init(attr_t *attr);
+
+/**
+ * Sets the mutex object attribute `attr` to the type specified by `type`.
+ */
+void mutex_attr_settype(attr_t *attr, int type);
+
+
+/**
+ * Destroys a mutex attribute object `attr`. In effect, the object becomes 
+ * uninitialized.
+ */
+void mutex_attr_destoy(attr_t *attr);
