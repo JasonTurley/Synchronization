@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "error.h"
 
-void throw_error(char *msg)
+void print_and_exit(char *msg)
 {
     fprintf(stderr, "%s\n", msg);
     exit(-1);
@@ -13,7 +13,7 @@ void* ec_malloc(size_t size)
     void* ret = malloc(size);
 
     if (ret == NULL) {
-        throw_error("Malloc failed");
+        print_and_exit("Malloc failed");
     }
 
     return ret;

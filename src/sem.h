@@ -23,3 +23,18 @@ typedef struct sem_t {
  * between threads (like global space or allocated on the heap).
  */
 void sem_init(sem_t *sem, int pshared, unsigned int value);
+
+/**
+ * 
+ */
+void sem_post(sem_t *sem);
+
+/**
+ * 
+ */
+void sem_wait(sem_t *sem);
+
+/**
+ * 
+ */
+void sem_destroy(sem_t *sem);
