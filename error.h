@@ -11,7 +11,7 @@ typedef unsigned long size_t;
 /**
  * Prints error message `msg` to stderr and exits process.
  */
-void print_and_exit(char *msg);
+void throw_error(char *msg);
 
 /**
  * An error checked wrapper function for malloc. Allocates space for 

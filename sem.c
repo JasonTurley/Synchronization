@@ -19,14 +19,14 @@ void sem_init(sem_t *sem, int pshared, unsigned int value)
         // credit: https://stackoverflow.com/questions/8359322/how-to-share-semaphores-between-processes-using-shared-memory
         int fd = shm_open("shm_file", O_CREAT, O_RDWR);
         if (fd == -1) {
-           print_and_exit("Failed to open shared memory file");
+           throw_error("Failed to open shared memory file");
         }
 
         ftruncate(fd, sizeof(sem_t));
         sem = mmap(NULL, sizeof(sem_t), PROT_READ | PROT_WRITE, 
                     MAP_SHARED, fd, 0);
         if (sem == (void *) -1)
-            print_and_exit("Failed to mmap memory");
+            throw_error("Failed to mmap memory");
     }
         sem->value = value;
 }

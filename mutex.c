@@ -28,7 +28,7 @@ void mutex_lock(mutex_t *mutex)
         if (mutex->type == ERRORCHECK) {
             if (mutex->locked && mutex->tid == pthread_self()) {
                 // Same thread attempting to relock mutex
-                print_and_exit("Same thread attempting to relock mutex");
+                throw_error("Same thread attempting to relock mutex");
             } else {
                 // This is the first calling thread. Save its id
                 mutex->tid = pthread_self();
