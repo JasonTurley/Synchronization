@@ -29,4 +29,37 @@ void sem_init(sem_t *sem, int pshared, unsigned int value)
             throw_error("Failed to mmap memory");
     }
         sem->value = value;
+        mutex_init(sem->mutex);     // normal, fast mutex
+
+}
+
+void sem_post(sem_t *sem)
+{
+    if (sem) {
+        mutex_lock(sem->mutex);
+        sem->value++;
+        mutex_unlock(sem->mutex);
+    }
+}
+
+void sem_wait(sem_t *sem)
+{
+    if (sem) {
+        while (sem->value == 0) 
+            pthread_cond_wait(sem->cv, sem->mutex);
+        
+        mutex_lock(sem->mutex);
+        sem->value--;
+        mutex_unlock(sem->mutex);
+    }
+}
+
+void sem_destroy(sem_t *sem)
+{
+    if (sem) {
+        mutex_destroy(sem->mutex);
+        pthread_cond_destroy(sem->cv);
+        free(sem);
+        sem = NULL;
+    }
 }

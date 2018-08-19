@@ -2,13 +2,18 @@
  * Declaration of a simple counting semaphore
  * @date (created) 8.17.18
  */
+#pragma once
+#include <pthread.h>    /* condition variable */
+#include "mutex.h"
 
 /**
  * Struct representing a semaphore
  */
 typedef struct sem_t {
     unsigned int value;
-    int pshared; 
+    int pshared;
+    mutex_t *mutex;
+    pthread_cond_t *cv;
 } sem_t;
 
 /**
@@ -23,3 +28,18 @@ typedef struct sem_t {
  * between threads (like global space or allocated on the heap).
  */
 void sem_init(sem_t *sem, int pshared, unsigned int value);
+
+/**
+ * 
+ */
+void sem_post(sem_t *sem);
+
+/**
+ * 
+ */
+void sem_wait(sem_t *sem);
+
+/**
+ * 
+ */
+void sem_destroy(sem_t *sem);

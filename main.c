@@ -2,37 +2,59 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <pthread.h>
+#include "sem.h"
 #include "mutex.h"
 
-mutex_t mtx;
+#define NUM_THREADS 10
+#define NUM_ITERS 1000
+
+mutex_t mutex;
 attr_t attr;
+sem_t sem;
+int global_count = 0;
 
-void* test_func(void* arg)
+void* increment(void* unused)
 {
-    int tid = *(int *)arg;
-    printf("Thread %d entered\n", tid);
+    mutex_lock(&mutex);
+    for (int i = 0; i < NUM_ITERS; i++)
+        global_count++;
+    mutex_unlock(&mutex);    
+}
 
-    mutex_lock(&mtx);
-    printf("Thread %d exited\n", tid);
-    mutex_unlock(&mtx);
+void test_mutex()
+{
+    pthread_t threads[NUM_THREADS];
+
+    // Launch threads
+    for (int i = 0; i < NUM_THREADS; i++)
+        pthread_create(&threads[i], NULL, increment, NULL);
+
+    // Wait for threads to finish
+    for (int i = 0; i < NUM_THREADS; i++)
+        pthread_join(threads[i], NULL);
+
+    // Validate correct output is given
+    assert(global_count == NUM_ITERS * NUM_THREADS);
+    
+    // reset for next test
+    global_count = 0;
 }
 
 int main(int argc, char const *argv[])
 {
-    // Initialize and set mutex
-    mutex_init(&mtx, NULL);
     mutex_attr_init(&attr);
     mutex_attr_settype(&attr, ERRORCHECK);
+    mutex_init(&mutex, NULL);
 
-    pthread_t thread;
+    // Test normal, fast mutex
+    test_mutex();
 
-    // Launch threads
-    for (int i = 0; i < 2; i++)
-        pthread_create(&thread, NULL, test_func, &i);
+    // test semaphore
+    sem_init(&sem, 0, 0);
+    printf("Initialize semaphore\n");
 
-    // Wait for threads to finish
-    for (int i = 0; i < 2; i++)
-        pthread_join(thread, NULL);
+    sem_post(&sem);
+    sem_wait(&sem);
 
     return 0;
 }

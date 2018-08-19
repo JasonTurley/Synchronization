@@ -47,6 +47,12 @@ void mutex_unlock(mutex_t *mutex)
     }
 }
 
+void mutex_changetype(mutex_t *mutex, attr_t *attr)
+{
+    if (mutex && attr)
+        mutex->type = attr->type;
+}
+
 void mutex_destroy(mutex_t *mutex)
 {
     free(mutex);

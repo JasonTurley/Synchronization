@@ -8,7 +8,7 @@
 /**
  * Mutex attribute types
  */
-typedef enum {NORMAL, ERRORCHECK, RECURSIVE, ADAPTIVE} TYPE;
+typedef enum {NORMAL, ERRORCHECK, RECURSIVE} TYPE;
 
 /**
  * Struct representing a mutex
@@ -61,6 +61,11 @@ void mutex_lock(mutex_t *mutex);
  * reference count reaches zero.
  */
 void mutex_unlock(mutex_t *mutex);
+
+/**
+ * Changes the type of a given mutex to the attribute `attr` type.
+ */
+void mutex_changetype(mutex_t *mutex, attr_t *attr);
 
 /**
  * Destroys the mutex object referenced by `mutex`; effectively uninitializing 
