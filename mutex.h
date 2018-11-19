@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <pthread.h>    /* pthread_t */
 /**
  * Mutex attribute types
  */
@@ -15,9 +16,9 @@ typedef enum {NORMAL, ERRORCHECK, RECURSIVE} TYPE;
  */
 typedef struct mutex_t {
     int locked;
-    unsigned int refcnt;        // reference count for recursive mutex
-    int tid;                    // thread associated with this mutex
-    TYPE type;                  // attribute settings
+    int refcnt;        // reference count for recursive mutex
+    pthread_t tid;     // thread associated with this mutex
+    TYPE type;         // attribute settings
 } mutex_t;
 
 /**
