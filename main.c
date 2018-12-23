@@ -22,6 +22,9 @@ int main()
     sem_init(&sem, 0, 0);
     sem_post(&sem);
     sem_wait(&sem);
+    sem_post(&sem);
+
+    printf("Done.\n");
 
     // TODO further test synchronization tools
     return 0;
