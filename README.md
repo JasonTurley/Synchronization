@@ -16,4 +16,4 @@ When releasing, the thread _must_ call ```mutex_unlock``` for each ```mutex_lock
 * Appreciate the complexity of OS kernels.
 
 # Credits
-This project is inspired by [SystemsProgrammingProjects]9https://github.com/angrave/SystemProgrammingProjects/wiki) by University of Illinois Computer Science professor, Lawrence Angrave.
+This project is inspired by [SystemsProgrammingProjects](https://github.com/angrave/SystemProgrammingProjects/wiki) by University of Illinois Computer Science professor, Lawrence Angrave.
